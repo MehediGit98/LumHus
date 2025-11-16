@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LumHus - Design & Consultancy Services</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Loading Screen Styles */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #fdfdfd 0%, #F4C400 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .lumhus-logo-container {
+            position: relative;
+            display: inline-block;
+            animation: logoAppear 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            opacity: 0;
+            transform: scale(0.5) rotateY(180deg);
+        }
+
+        .lumhus-logo-text {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 20rem;
+            font-weight: 700;
+            text-shadow: 0 0 30px rgba(244, 196, 0, 0.6);
+            animation: logoGlow 2s ease-in-out infinite;
+            letter-spacing: 0.05em;
+        }
+        
+        .lumhus-logo-text .lum {
+            color: #F4C400;
+        }
+        
+        .lumhus-logo-text .hus {
+            color: #1A1A1A;
+        }
+
+        @keyframes logoAppear {
+            to {
+                opacity: 1;
+                transform: scale(1) rotateY(0deg);
+            }
+        }
+
+        @keyframes logoGlow {
+            0%, 100% {
+                text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+            }
+            50% {
+                text-shadow: 0 0 50px rgba(244, 196, 0, 0.8);
+            }
+        }
+
+        .loading-tagline {
+            font-size: 2rem;
+            color: #000000;
+            margin-top: 2rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards 1s;
+            letter-spacing: 0.1em;
+            font-weight: 300;
+            transform: translateY(20px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .circle-container {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .circle {
+            position: absolute;
+            border: 2px solid rgba(125, 125, 125, 0.3);
+            border-radius: 50%;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .circle:nth-child(1) {
+            width: 100%;
+            height: 100%;
+            animation-delay: 0s;
+        }
+
+        .circle:nth-child(2) {
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0.5s;
+        }
+
+        .circle:nth-child(3) {
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+            animation-delay: 1s;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.2;
+            }
+            50% {
+                transform: scale(1.15);
+                opacity: 0.5;
+            }
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #000000;
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 3s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0.2s; }
+        .particle:nth-child(2) { left: 25%; animation-delay: 0.8s; }
+        .particle:nth-child(3) { left: 40%; animation-delay: 1.2s; }
+        .particle:nth-child(4) { left: 55%; animation-delay: 0.5s; }
+        .particle:nth-child(5) { left: 70%; animation-delay: 1.5s; }
+        .particle:nth-child(6) { left: 85%; animation-delay: 0.9s; }
+
+        @keyframes particleFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(50vh) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(0) scale(0);
+            }
+        }
+
+        .loading-progress {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #ffffff;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            letter-spacing: 0.1em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #F4C400, #ffffff);
+            width: 0;
+            animation: loadProgress 2.5s ease-out forwards;
+            box-shadow: 0 0 15px #F4C400;
+        }
+
+        @keyframes loadProgress {
+            to {
+                width: 100%;
+            }
+        }
+
+        /* Base Styles */
+        :root {
+            --warm-yellow: #F4C400;
+            --charcoal-black: #1A1A1A;
+            --soft-cream: #FAF8F3;
+            --transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --section-padding: 120px 0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--soft-cream);
+            color: var(--charcoal-black);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        section {
+            padding: var(--section-padding);
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            line-height: 1.2;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 16px 32px;
+            background-color: var(--warm-yellow);
+            color: var(--charcoal-black);
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: #ffd700;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(244, 196, 0, 0.3);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--warm-yellow);
+            color: var(--charcoal-black);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--warm-yellow);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 0;
+            z-index: 1000;
+            transition: var(--transition);
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        nav.scrolled {
+            padding: 16px 0;
+            background-color: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        .nav-logo .lum {
+            color: #F4C400;
+        }
+        
+        .nav-logo .hus {
+            color: #1A1A1A;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .nav-menu a {
+            color: var(--charcoal-black);
+            font-weight: 500;
+            font-size: 1.5rem;
+            position: relative;
+            padding: 8px 0;
+            transition: var(--transition);
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--warm-yellow);
+            transition: var(--transition);
+        }
+
+        .nav-menu a:hover {
+            color: var(--warm-yellow);
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--charcoal-black);
+            transition: var(--transition);
+            border-radius: 3px;
+        }
+
+        /* Banner Slider */
+        .banner-slider {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            overflow: hidden;
+            background-color: var(--charcoal-black);
+            margin-top: 76px;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.9;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--charcoal-black) 0%, #2a2a2a 100%);
+            color: var(--soft-cream);
+            padding-top: 100px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero-tagline {
+            font-size: 1.5rem;
+            color: var(--warm-yellow);
+            margin-bottom: 2rem;
+            display: block;
+        }
+
+        /* Services Section */
+        .services {
+            background-color: white;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .service-card {
+            background-color: var(--soft-cream);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: var(--warm-yellow);
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+
+        .service-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(244, 196, 0, 0.15);
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .service-content {
+            padding: 30px;
+        }
+
+        /* Work Section */
+        .work {
+            background-color: var(--charcoal-black);
+            color: var(--soft-cream);
+        }
+
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+
+        .work-item {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            height: 500px;
+            cursor: pointer;
+        }
+
+        .work-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .work-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .work-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 40px;
+            background: linear-gradient(to top, rgba(26, 26, 26, 0.9), transparent);
+            transition: var(--transition);
+        }
+
+        .work-item:hover .work-overlay {
+            background: linear-gradient(to top, rgba(26, 26, 26, 0.95), transparent);
+        }
+
+        .work-category {
+            color: var(--warm-yellow);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Project Details Gallery */
+        .project-details {
+            display: none;
+            padding-top: 40px;
+        }
+
+        .project-details.active {
+            display: block;
+        }
+
+        .back-button {
+            background-color: var(--warm-yellow);
+            color: var(--charcoal-black);
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 2rem;
+            transition: var(--transition);
+        }
+
+        .back-button:hover {
+            background-color: #ddb000;
+            transform: translateY(-2px);
+        }
+
+        .project-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 2rem;
+        }
+
+        .gallery-item {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(244, 196, 0, 0.3);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .gallery-item-title {
+            padding: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+            color: var(--charcoal-black);
+            font-size: 1.1rem;
+        }
+
+        .gallery-link-btn {
+            display: block;
+            background-color: var(--warm-yellow);
+            color: var(--charcoal-black);
+            text-align: center;
+            padding: 12px;
+            margin: 0 1.5rem 1.5rem;
+            border-radius: 5px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .gallery-link-btn:hover {
+            background-color: #ddb000;
+            transform: translateY(-2px);
+        }
+
+        /* About Section */
+        .about {
+            background-color: white;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-text {
+            padding-right: 40px;
+        }
+
+        .about-image {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Team Section */
+        .team {
+            background-color: var(--soft-cream);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .team-member {
+            text-align: center;
+            background-color: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(244, 196, 0, 0.15);
+        }
+
+        .team-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            border: 5px solid var(--warm-yellow);
+        }
+
+        .team-title {
+            color: var(--warm-yellow);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* Contact Section */
+        .contact {
+            background-color: var(--charcoal-black);
+            color: var(--soft-cream);
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .contact-icon {
+            font-size: 1.5rem;
+            color: var(--warm-yellow);
+            margin-top: 5px;
+        }
+
+        .contact-text h3 {
+            margin-bottom: 5px;
+            color: var(--warm-yellow);
+        }
+
+        .contact-form {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            color: var(--soft-cream);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--warm-yellow);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #111;
+            color: var(--soft-cream);
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .footer-logo .lum {
+            color: #F4C400;
+        }
+        
+        .footer-logo .hus {
+            color: var(--soft-cream);
+        }
+
+        .footer-about p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .footer-links h3 {
+            color: var(--warm-yellow);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--warm-yellow);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background-color: var(--warm-yellow);
+            transform: translateY(-5px);
+        }
+
+        .social-links i {
+            font-size: 1.2rem;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            h1 { font-size: 3.5rem; }
+            h2 { font-size: 2.8rem; }
+            .container { padding: 0 30px; }
+            .lumhus-logo-text { font-size: 12rem; }
+        }
+
+        @media (max-width: 992px) {
+            .about-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .about-text { padding-right: 0; }
+            .footer-content { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8rem; }
+            h2 { font-size: 2.2rem; }
+            .banner-slider { height: 300px; }
+            .lumhus-logo-text { font-size: 8rem; }
+            .loading-tagline { font-size: 1rem; }
+            .circle-container { width: 350px; height: 350px; }
+            .loading-progress { width: 250px; }
+            
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background-color: white;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 30px;
+                transition: var(--transition);
+                z-index: 999;
+            }
+            
+            .nav-menu.active { right: 0; }
+            .hamburger { display: flex; z-index: 1000; }
+            
+            .hamburger.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+            .hamburger.active span:nth-child(2) { opacity: 0; }
+            .hamburger.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -6px);
+            }
+            
+            .work-grid { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 576px) {
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.8rem; }
+            .container { padding: 0 20px; }
+            section { padding: 80px 0; }
+            .services-grid { grid-template-columns: 1fr; }
+            .lumhus-logo-text { font-size: 5rem; }
+            .loading-tagline { font-size: 0.85rem; padding: 0 20px; }
+            .circle-container { width: 280px; height: 280px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="circle-container">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div>
+        
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+        
+        <div class="loading-content">
+            <div class="lumhus-logo-container">
+                <div class="lumhus-logo-text"><span class="lum">Lum</span><span class="hus">Hus</span></div>
+            </div>
+            <div class="loading-tagline">Enlightened House for Design & Ideas</div>
+        </div>
+        
+        <div class="loading-progress">
+            <div class="progress-text">Loading...</div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="container nav-container">
+            <a href="#" class="nav-logo"><span class="lum">Lum</span><span class="hus">Hus</span></a>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#work">Work</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Banner Slider -->
+    <div class="banner-slider">
+        <div class="slide active">
+            <img src="images/banner/banner1.jpg" alt="Banner 1">
+        </div>
+        <div class="slide">
+            <img src="images/banner/banner2.jpg" alt="Banner 2">
+        </div>
+        <div class="slide">
+            <img src="images/banner/banner3.jpg" alt="Banner 3">
+        </div>
+        <div class="slide">
+            <img src="images/banner/banner4.jpg" alt="Banner 4">
+        </div>
+        <div class="slide">
+            <img src="images/banner/banner5.jpg" alt="Banner 5">
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <span class="hero-tagline">Enlightened House for Design & Ideas</span>
+                <h1>Transforming visions into exceptional experiences</h1>
+                <p>We are a multi-disciplinary design and consultancy firm dedicated to delivering innovative solutions across architecture, interior design, lighting, software development, and management consultancy.</p>
+                <a href="#work" class="btn">Explore Our Work</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="fade-in">Our Services</h2>
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <img src="images/services/architectural-design.jpg" alt="Architectural Design" class="service-image">
+                    <div class="service-content">
+                        <h3>Architectural Design</h3>
+                        <p>Creating innovative and sustainable architectural solutions that blend functionality with aesthetic excellence.</p>
+                    </div>
+                </div>
+                <div class="service-card fade-in">
+                    <img src="images/services/interior-design.jpg" alt="Interior Design" class="service-image">
+                    <div class="service-content">
+                        <h3>Interior Design</h3>
+                        <p>Transforming interior spaces into beautiful, functional environments that reflect your style and needs.</p>
+                    </div>
+                </div>
+                <div class="service-card fade-in">
+                    <img src="images/services/lighting-design.jpg" alt="Lighting Design" class="service-image">
+                    <div class="service-content">
+                        <h3>Lighting Design</h3>
+                        <p>Illuminating spaces with thoughtful lighting design that enhances ambiance and energy efficiency.</p>
+                    </div>
+                </div>
+                <div class="service-card fade-in">
+                    <img src="images/services/uiux-design.jpg" alt="UI/UX/Software Design" class="service-image">
+                    <div class="service-content">
+                        <h3>UI/UX/Software Design</h3>
+                        <p>Crafting intuitive and engaging digital experiences that delight users and drive business success.</p>
+                    </div>
+                </div>
+                <div class="service-card fade-in">
+                    <img src="images/services/graphic-design.jpg" alt="Graphic/Logo Design" class="service-image">
+                    <div class="service-content">
+                        <h3>Graphic Design</h3>
+                        <p>Creating memorable visual identities and stunning graphic designs that capture your brand essence.</p>
+                    </div>
+                </div>
+                <div class="service-card fade-in">
+                    <img src="images/services/online-courses.jpg" alt="Online Courses" class="service-image">
+                    <div class="service-content">
+                        <h3>Online Courses</h3>
+                        <p>Comprehensive educational programs to enhance your skills in design, architecture, and technology.</p>
+                    </div>
+                </div>
+                <div class="service-card fade-in">
+                    <img src="images/services/management-consultancy.jpg" alt="Management Consultancy" class="service-image">
+                    <div class="service-content">
+                        <h3>Management Consultancy</h3>
+                        <p>Strategic guidance and expert advice to optimize your business operations and drive growth.</p>
+                    </div>
+                </div>
+                <div class="service-card fade-in">
+                    <img src="images/services/research-design.jpg" alt="Research" class="service-image">
+                    <div class="service-content">
+                        <h3>Research</h3>
+                        <p>Committed to delivering high-quality research outcomes that contribute to informed decision-making.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Section -->
+    <section id="work" class="work">
+        <div class="container">
+            <div id="work-overview">
+                <h2 class="fade-in">Our Work</h2>
+                <div class="work-grid">
+                    <div class="work-item fade-in" onclick="showProjectGallery('architecture')">
+                        <img src="images/projects/architecture/architecture-main.jpg" alt="Architecture Project">
+                        <div class="work-overlay">
+                            <h3>Architecture</h3>
+                            <p>Innovative design blending sustainability with aesthetics</p>
+                        </div>
+                    </div>
+                    <div class="work-item fade-in" onclick="showProjectGallery('interior')">
+                        <img src="images/projects/interior/interior-main.jpg" alt="Interior Design Project">
+                        <div class="work-overlay">
+                            <h3>Luxury Interior</h3>
+                            <p>Creating harmonious living spaces with attention to detail</p>
+                        </div>
+                    </div>
+                    <div class="work-item fade-in" onclick="showProjectGallery('uiux')">
+                        <img src="images/projects/uiux/uiux-main.jpg" alt="UI/UX Design Project">
+                        <div class="work-overlay">
+                            <h3>UI/UX/Software Design</h3>
+                            <p>User-centered design for seamless digital experience with AI</p>
+                        </div>
+                    </div>
+                    <div class="work-item fade-in" onclick="showProjectGallery('lighting')">
+                        <img src="images/projects/lighting/lighting-main.jpg" alt="Lighting Design Project">
+                        <div class="work-overlay">
+                            <h3>Health Lighting</h3>
+                            <p>Energy-efficient lighting solutions enhancing architectural features</p>
+                        </div>
+                    </div>
+                    <div class="work-item fade-in" onclick="showProjectGallery('graphic')">
+                        <img src="images/projects/graphic/graphic-main.jpg" alt="Graphic Design Project">
+                        <div class="work-overlay">
+                            <h3>Brand Identity Design</h3>
+                            <p>Creating memorable visual identities that capture brand essence</p>
+                        </div>
+                    </div>
+                    <div class="work-item fade-in" onclick="showProjectGallery('research')">
+                        <img src="images/projects/research/research-main.jpg" alt="Research Project">
+                        <div class="work-overlay">
+                            <h3>Research in Design & AI</h3>
+                            <p>Contributing to informed decision-making through quality research</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Architecture Gallery -->
+            <div id="architecture-gallery" class="project-details">
+                <button class="back-button" onclick="backToWork()">← Back to Our Work</button>
+                <h2>Architecture Projects</h2>
+                <div class="project-gallery">
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/architecture/project1.jpg" alt="Architecture Project 1">
+                        <div class="gallery-item-title">Residential Complex</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/architecture/project2.jpg" alt="Architecture Project 2">
+                        <div class="gallery-item-title">Institutional Building</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/architecture/project3.jpg" alt="Architecture Project 3">
+                        <div class="gallery-item-title">Modern Villa</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/architecture/project4.jpg" alt="Architecture Project 4">
+                        <div class="gallery-item-title">Laboratory Building</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/architecture/project5.jpg" alt="Architecture Project 5">
+                        <div class="gallery-item-title">Office Building</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/architecture/project6.jpg" alt="Architecture Project 6">
+                        <div class="gallery-item-title">Urban Development</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interior Gallery -->
+            <div id="interior-gallery" class="project-details">
+                <button class="back-button" onclick="backToWork()">← Back to Our Work</button>
+                <h2>Interior Design Projects</h2>
+                <div class="project-gallery">
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/interior/project1.jpg" alt="Interior Project 1">
+                        <div class="gallery-item-title">Luxury Apartment</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/interior/project2.jpg" alt="Interior Project 2">
+                        <div class="gallery-item-title">Office Space</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/interior/project3.jpg" alt="Interior Project 3">
+                        <div class="gallery-item-title">Restaurant Interior</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/interior/project4.jpg" alt="Interior Project 4">
+                        <div class="gallery-item-title">Boutique Shop</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/interior/project5.jpg" alt="Interior Project 5">
+                        <div class="gallery-item-title">Conference Room</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/interior/project6.jpg" alt="Interior Project 6">
+                        <div class="gallery-item-title">Reception Lobby</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UI/UX Gallery -->
+            <div id="uiux-gallery" class="project-details">
+                <button class="back-button" onclick="backToWork()">← Back to Our Work</button>
+                <h2>UI/UX/Software Projects</h2>
+                <div class="project-gallery">
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/uiux/project1.jpg" alt="UI/UX Project 1">
+                        <div class="gallery-item-title">Mobile App Design</div>
+                        <a href="https://your-website1.com" target="_blank" class="gallery-link-btn">View Live Website →</a>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/uiux/project2.jpg" alt="UI/UX Project 2">
+                        <div class="gallery-item-title">Web Platform</div>
+                        <a href="https://your-website2.com" target="_blank" class="gallery-link-btn">View Live Website →</a>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/uiux/project3.jpg" alt="UI/UX Project 3">
+                        <div class="gallery-item-title">Dashboard Design</div>
+                        <a href="https://your-website3.com" target="_blank" class="gallery-link-btn">View Live Website →</a>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/uiux/project4.jpg" alt="UI/UX Project 4">
+                        <div class="gallery-item-title">E-commerce Solution</div>
+                        <a href="https://your-website4.com" target="_blank" class="gallery-link-btn">View Live Website →</a>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/uiux/project5.jpg" alt="UI/UX Project 5">
+                        <div class="gallery-item-title">SaaS Platform</div>
+                        <a href="https://your-website5.com" target="_blank" class="gallery-link-btn">View Live Website →</a>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/uiux/project6.jpg" alt="UI/UX Project 6">
+                        <div class="gallery-item-title">Corporate Website</div>
+                        <a href="https://your-website6.com" target="_blank" class="gallery-link-btn">View Live Website →</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lighting Gallery -->
+            <div id="lighting-gallery" class="project-details">
+                <button class="back-button" onclick="backToWork()">← Back to Our Work</button>
+                <h2>Lighting Design Projects</h2>
+                <div class="project-gallery">
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/lighting/project1.jpg" alt="Lighting Project 1">
+                        <div class="gallery-item-title">Architectural Lighting</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/lighting/project2.jpg" alt="Lighting Project 2">
+                        <div class="gallery-item-title">Landscape Illumination</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/lighting/project3.jpg" alt="Lighting Project 3">
+                        <div class="gallery-item-title">Residential Lighting</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/lighting/project4.jpg" alt="Lighting Project 4">
+                        <div class="gallery-item-title">Retail Lighting</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/lighting/project5.jpg" alt="Lighting Project 5">
+                        <div class="gallery-item-title">Office Lighting</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/lighting/project6.jpg" alt="Lighting Project 6">
+                        <div class="gallery-item-title">Auditorium Design</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graphic Gallery -->
+            <div id="graphic-gallery" class="project-details">
+                <button class="back-button" onclick="backToWork()">← Back to Our Work</button>
+                <h2>Graphic Design Projects</h2>
+                <div class="project-gallery">
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/graphic/project1.jpg" alt="Graphic Project 1">
+                        <div class="gallery-item-title">Brand Identity</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/graphic/project2.jpg" alt="Graphic Project 2">
+                        <div class="gallery-item-title">Logo Design</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/graphic/project3.jpg" alt="Graphic Project 3">
+                        <div class="gallery-item-title">Marketing Materials</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/graphic/project4.jpg" alt="Graphic Project 4">
+                        <div class="gallery-item-title">Packaging Design</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/graphic/project5.jpg" alt="Graphic Project 5">
+                        <div class="gallery-item-title">Print Design</div>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/graphic/project6.jpg" alt="Graphic Project 6">
+                        <div class="gallery-item-title">Visual Identity System</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Research Gallery -->
+            <div id="research-gallery" class="project-details">
+                <button class="back-button" onclick="backToWork()">← Back to Our Work</button>
+                <h2>Research Projects</h2>
+                <div class="project-gallery">
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/research/project1.jpg" alt="Research Project 1">
+                        <div class="gallery-item-title">Sustainable Architecture Study</div>
+                        <a href="https://your-research-paper1.com" target="_blank" class="gallery-link-btn">View Publication →</a>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/research/project2.jpg" alt="Research Project 2">
+                        <div class="gallery-item-title">Urban Planning Research</div>
+                        <a href="https://your-research-paper2.com" target="_blank" class="gallery-link-btn">View Publication →</a>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/research/project3.jpg" alt="Research Project 3">
+                        <div class="gallery-item-title">Design Innovation</div>
+                        <a href="https://your-research-paper3.com" target="_blank" class="gallery-link-btn">View Publication →</a>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/research/project4.jpg" alt="Research Project 4">
+                        <div class="gallery-item-title">Smart Cities Research</div>
+                        <a href="https://your-research-paper4.com" target="_blank" class="gallery-link-btn">View Publication →</a>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/research/project5.jpg" alt="Research Project 5">
+                        <div class="gallery-item-title">Environmental Impact Study</div>
+                        <a href="https://your-research-paper5.com" target="_blank" class="gallery-link-btn">View Publication →</a>
+                    </div>
+                    <div class="gallery-item fade-in">
+                        <img src="images/projects/research/project6.jpg" alt="Research Project 6">
+                        <div class="gallery-item-title">Lighting Technology Research</div>
+                        <a href="https://your-research-paper6.com" target="_blank" class="gallery-link-btn">View Publication →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="fade-in">About Us</h2>
+            <div class="about-content">
+                <div class="about-text fade-in">
+                    <p>Welcome to LumHus - your Enlightened House for Design & Ideas. We are a multi-disciplinary design and consultancy firm dedicated to delivering exceptional solutions across architecture, interior design, lighting, software development, and management consultancy.</p>
+                    <p>Our team of experienced professionals combines creativity with technical expertise to transform your vision into reality. With a commitment to innovation, sustainability, and client satisfaction, we strive to exceed expectations in every project we undertake.</p>
+                    <p>From conceptual design to final implementation, we work closely with our clients to ensure that every detail aligns with their goals and aspirations.</p>
+                    <a href="#contact" class="btn btn-outline">Get In Touch</a>
+                </div>
+                <div class="about-image fade-in">
+                    <img src="images/logo.jpg" alt="About LumHus">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team">
+        <div class="container">
+            <h2 class="fade-in">Our Leadership</h2>
+            <div class="team-grid">
+                <div class="team-member fade-in">
+                    <img src="images/team/ceo.jpg" alt="Mst. Julia Chowdhury" class="team-photo">
+                    <h3>Mst. Julia Chowdhury</h3>
+                    <div class="team-title">Chief Executive Officer</div>
+                    <p>With over 15 years of experience in design and consultancy, our CEO leads LumHus with a vision of innovation and excellence.</p>
+                </div>
+                <div class="team-member fade-in">
+                    <img src="images/team/architect.jpg" alt="Mehedi Islam" class="team-photo">
+                    <h3>Architect</h3>
+                    <div class="team-title">Honorary Architect</div>
+                    <p>Our Honorary Architect brings extensive expertise in architectural and lighting design, specializing in climate change.</p>
+                </div>
+                <div class="team-member fade-in">
+                    <img src="images/team/director.jpg" alt="Director" class="team-photo">
+                    <h3>A.K.M. Shafiqul Islam</h3>
+                    <div class="team-title">Creative Director</div>
+                    <p>Our Creative Director leads our design teams with a focus on innovative solutions and exceptional user experiences.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="fade-in">Contact Us</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item fade-in">
+                        <i class="fas fa-map-marker-alt contact-icon"></i>
+                        <div class="contact-text">
+                            <h3>Address</h3>
+                            <p>1138, Ibrahimpur, Kafrul<br>Dhaka 1206, Bangladesh</p>
+                        </div>
+                    </div>
+                    <div class="contact-item fade-in">
+                        <i class="fas fa-envelope contact-icon"></i>
+                        <div class="contact-text">
+                            <h3>Email</h3>
+                            <p>farhanmehedi15@gmail.com<br>julia123@yahoo.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item fade-in">
+                        <i class="fas fa-phone contact-icon"></i>
+                        <div class="contact-text">
+                            <h3>Phone / WhatsApp</h3>
+                            <p>+880 1753930717<br>+880 1718016469</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="contact-form fade-in">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo"><span class="lum">Lum</span><span class="hus">Hus</span></div>
+                    <p>Enlightened House for Design & Ideas. We transform visions into exceptional experiences through innovative design and consultancy services.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#services">Architectural Design</a></li>
+                        <li><a href="#services">Interior Design</a></li>
+                        <li><a href="#services">Lighting Design</a></li>
+                        <li><a href="#services">UI/UX Design</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#work">Our Work</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                        <li><a href="#">Online Courses</a></li>
+                        <li><a href="#">Research</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 LumHus. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Hide loading screen after animation completes
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loadingScreen').classList.add('fade-out');
+                setTimeout(function() {
+                    document.getElementById('loadingScreen').remove();
+                }, 500);
+            }, 3000);
+        });
+
+        // Navigation scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', function() {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Banner slider functionality
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+        
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+        
+        setInterval(nextSlide, 3000);
+
+        // Scroll animations
+        const fadeElements = document.querySelectorAll('.fade-in');
+
+        const fadeInOnScroll = function() {
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', fadeInOnScroll);
+        window.addEventListener('load', fadeInOnScroll);
+
+        // Form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! We will get back to you soon.');
+            this.reset();
+        });
+
+        // Project gallery navigation
+        function showProjectGallery(category) {
+            document.getElementById('work-overview').style.display = 'none';
+            document.getElementById(category + '-gallery').classList.add('active');
+            window.scrollTo({ top: document.getElementById('work').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function backToWork() {
+            const galleries = document.querySelectorAll('.project-details');
+            galleries.forEach(gallery => gallery.classList.remove('active'));
+            document.getElementById('work-overview').style.display = 'block';
+            window.scrollTo({ top: document.getElementById('work').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
